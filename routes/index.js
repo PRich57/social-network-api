@@ -5,4 +5,4 @@ router.use('/api', apiRoutes);
 
 router.use((req, res) => res.send('Wrong route!'));
 
-modul
+module.exports = router;
