@@ -37,7 +37,7 @@ module.exports = {
     }
   },
   
-  async delete(req, res) {
+  async deleteOne(req, res) {
     try {
       res.status(200).json({ message: 'Delete thought' });
     } catch (err) {
