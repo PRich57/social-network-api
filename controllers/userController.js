@@ -4,7 +4,8 @@ module.exports = {
   // Get all users
   async getAll(req, res) {
     try {
-      const users = await User.find();
+      const users = await User.find()
+        .select('-__v');
       res.status(200).json(users);
     } catch (err) {
       console.error(err);
@@ -39,7 +40,7 @@ module.exports = {
     }
   },
   // Add user friend
-  async create(req, res) {
+  async createFriend(req, res) {
     try {
       const { userId, friendId } = req.params;
 
@@ -87,6 +88,7 @@ module.exports = {
         res.status(404).json({ message: 'No user with this ID!' });
       }
 
+      // Delete all thoughts associated with this user
       await Thought.deleteMany({ _id: { $in: user.thoughts } })
 
       res.status(200).json({ message: 'User and associated thoughts successfully deleted!' });
@@ -95,4 +97,27 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  // Remove friend
+  async deleteFriend(req, res) {
+    try {
+      const { userId, friendId } = req.params;
+
+      const user = await User.findOneAndUpdate(
+        { _id: userId },
+        { $pull: { friends: friendId } },
+        { new: true },
+        );
+
+        if (!user) {
+          return res.status(404).json({ message: "No user with this ID!" });
+        } else if (!friendId) {
+          return res.status(404).json({ message: "No friend with this ID!" });
+        }
+
+      res.status(200).json(user);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json(err);
+    }
+  }
 };
