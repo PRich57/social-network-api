@@ -100,10 +100,16 @@ module.exports = {
   async deleteOne(req, res) {
     try {
       const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
-
+      
       if (!thought) {
         return res.status(404).json({ message: 'No thought with this ID!'})
       }
+
+      await User.findOneAndUpdate(
+        { username: thought.username },
+        { $pull: { thoughts: req.params.thoughtId } },
+        { runValidators: true, new: true },
+      );
 
       res.status(200).json({ message: 'Thought successfully deleted!' });
     } catch (err) {
@@ -114,7 +120,6 @@ module.exports = {
   // Delete a reaction
   async deleteReaction(req, res) {
     try {
-
       const thought = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $pull: { reactions: { reactionId: req.params.reactionId } } },
@@ -124,7 +129,7 @@ module.exports = {
       if (!thought) {
         return res.status(404).json({ message: "No thought with this ID!" });
       }
-      
+
       res.status(200).json(thought);
     } catch (err) {
       console.error(err);
