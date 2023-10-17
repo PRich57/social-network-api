@@ -14,7 +14,8 @@ module.exports = {
   // Get one thought
   async getOne(req, res) {
     try {
-      const thought = await Thought.findOne({ _id: req.params.thoughtId });
+      const thought = await Thought.findOne({ _id: req.params.thoughtId })
+      .populate('reactions');
 
       if (!thought) {
         return res.status(404).json({ message: 'No thought with this ID!' });
