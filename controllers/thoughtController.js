@@ -61,12 +61,10 @@ module.exports = {
   // Add a reaction
   async createReaction(req, res) {
     try {
-      const { thoughtId, reactionId } = req.params;
-
       const thought = await Thought.findOneAndUpdate(
-        { _id: thoughtId },
-        { $addToSet: { reactions: reactionId } },
-        { new: true },
+        { _id: req.params.thoughtId },
+        { $addToSet: { reactions: req.body } },
+        { runValidators: true, new: true },
       );
 
       if (!thought) {
@@ -113,4 +111,28 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  // Delete a reaction
+  async deleteReaction(req, res) {
+    try {
+      // Deconstruct to get convenience variables
+      const { thoughtId, reactionId } = req.params;
+
+      const thought = await Thought.findOneAndUpdate(
+        { _id: thoughtId },
+        { $pull: { reactions: reactionId } },
+        { new: true },
+      );
+
+      if (!thought) {
+        return res.status(404).json({ message: "No thought with this ID!" });
+      } else if (!reactionId) {
+        return res.status(404).json({ message: "No reaction with this ID!" });
+      }
+
+      res.status(200).json(thought);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json(err);
+    }
+  }
 };
