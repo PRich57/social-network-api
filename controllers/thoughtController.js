@@ -114,21 +114,17 @@ module.exports = {
   // Delete a reaction
   async deleteReaction(req, res) {
     try {
-      // Deconstruct to get convenience variables
-      const { thoughtId, reactionId } = req.params;
 
       const thought = await Thought.findOneAndUpdate(
-        { _id: thoughtId },
-        { $pull: { reactions: reactionId } },
-        { new: true },
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true },
       );
 
       if (!thought) {
         return res.status(404).json({ message: "No thought with this ID!" });
-      } else if (!reactionId) {
-        return res.status(404).json({ message: "No reaction with this ID!" });
       }
-
+      
       res.status(200).json(thought);
     } catch (err) {
       console.error(err);
