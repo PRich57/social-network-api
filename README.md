@@ -6,7 +6,7 @@
 
 The Social Network API is a RESTful API for managing users, thoughts, reactions, and friend connections in a social network. It allows you to perform various CRUD (Create, Read, Update, Delete) operations on users, thoughts, reactions, and friend connections.
 
-To see the video demonstration click [here!](https://drive.google.com/file/d/1ilhYLn6KdlHxBVJS67vRIPq7JvzNE4w3/view?usp=sharing)
+To see the video demonstration click [HERE!](https://drive.google.com/file/d/1ilhYLn6KdlHxBVJS67vRIPq7JvzNE4w3/view?usp=sharing)
 
 ## Table of Contents
 
