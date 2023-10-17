@@ -38,6 +38,27 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  // Add user friend
+  async create(req, res) {
+    try {
+      const { userId, friendId } = req.params;
+
+      const user = await User.findOneAndUpdate(
+        { _id: userId },
+        { $addToSet: { friends: friendId } },
+        { new: true },
+        );
+
+        if (!user) {
+          return res.status(404).json({ message: "No user with this ID!" });
+        }
+
+      res.status(200).json(user)
+    } catch (err) {
+      console.error(err);
+      res.status(500).json(err)
+    }
+  },
   // Update a user
   async update(req, res) {
     try {
@@ -51,7 +72,7 @@ module.exports = {
         res.status(404).json({ message: 'No user with this ID!' });
       }
 
-      res.status(200).json({ message: 'Update user' });
+      res.status(200).json({ message: 'User updated successfully!' });
     } catch (err) {
       console.error(err);
       res.status(500).json(err);

@@ -14,4 +14,7 @@ router.route('/').get(getAll).post(create);
 // /api/users/:userId
 router.route('/:userId').get(getOne).put(update).delete(deleteOne);
 
+// /api/users/:userId/friends/:friendId
+router.route('/:userId/friends/:friendId').post(create).delete(deleteOne);
+
 module.exports = router;
